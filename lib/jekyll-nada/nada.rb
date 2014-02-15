@@ -1,10 +1,10 @@
 module Jekyll
   
-  module Tags
+  module Nada
     
     # I have come here to chew bubblegum and kick ass ...
     # ... and I'm all out of bubblegum.
-    class Nada < Liquid::Tag
+    class NadaTag < Liquid::Tag
       
       # Internal globals:
       NS = 'nada'                # Namespace.

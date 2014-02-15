@@ -1,20 +1,22 @@
-# Nada
+# Jekyll Nada
 
-TODO: Write a gem description
+**I have come here to chew bubblegum and kick ass, and I'm all out of bubblegum.**
+
+---
+
+## About
+
+**A glorified Jekyll include tag.**
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'nada'
+    gem 'jekyll-nada', :git => 'git://github.com/mhulse/jekyll-nada.git'
 
 And then execute:
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install nada
+    $ bundle install
 
 ## Usage
 

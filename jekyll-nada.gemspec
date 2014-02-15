@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'nada/version'
+require 'jekyll-nada/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "nada"
-  spec.version       = Nada::VERSION
+  spec.name          = "jekyll-nada"
+  spec.version       = Jekyll::Nada::VERSION
   spec.authors       = ["Micky Hulse"]
   spec.email         = ["mickyhulse@gmail.com"]
   spec.summary       = %q{TODO: Write a short summary. Required.}
