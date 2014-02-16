@@ -1,12 +1,14 @@
 # Jekyll Nada
 
-**I have come here to chew bubblegum and kick ass, and I'm all out of bubblegum.**
-
----
+<p align="center">
+  <a href="http://www.imdb.com/title/tt0096256/" target="_blank">
+    <img width="100%" src="nada.gif" alt="I have come here to chew bubblegum and kick ass ... and I'm all out of bubblegum.">
+  </a>
+</p>
 
 ## About
 
-**A glorified Jekyll include tag.**
+**A glorified [Jekyll](http://jekyllrb.com/) include tag.**
 
 I wrote this plugin to help me manage embedding of different types of media (`<img>`, `<iframe>`, HTML5 `<audio>` and `<video>`, etc.) in post pages.
 
