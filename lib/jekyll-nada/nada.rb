@@ -30,10 +30,10 @@ module Jekyll
         render_markup = Liquid::Template.parse(@markup).render(context).gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
         
         # Regex to match expected tag syntax:
-        markup = /^(?:(?<key>^\s*([[:alnum:]]+)?\s*)\s+)?\s*(?<options>[\s\S]+)?$/.match(render_markup)
+        markup = /^(?<key>[[:alnum:]]+)?:?(?<raw>\braw\b)?\s*(?<options>[\s\S]+)?$/.match(render_markup)
         
         # Raise an exception if tag syntax is bad:
-        raise "\"%s\" tag syntax error. Try {% %s [front matter key (optional)] [override=\"value\" (optional)] %}." % [NS.capitalize, NS] unless markup
+        raise "\"%s\" tag syntax error. Try {% %s [front matter key (optional)][:raw (optional)] [override=\"value\" (optional)] %}." % [NS.capitalize, NS] unless markup
         
         # Is there an optional `key` specifeid?
         if not markup[:key].nil?
@@ -62,7 +62,7 @@ module Jekyll
         # Get at front matter via `key`?
         settings = if key
           
-          # Yes, so deep copy preset for single instance manipulation:
+          # Yes, so deep copy front matter for single instance manipulation:
           Marshal.load(Marshal.dump(key)) # Front matter defaults.
           
         else
@@ -97,17 +97,27 @@ module Jekyll
         # Change the CWD of the process to `file_path`:
         Dir.chdir(file_path) do
           
-          # Parse template part:
-          partial = Liquid::Template.parse(file.read.strip)
+          contents = file.read.strip
           
-          # ?
-          context.stack do
+          if markup[:raw]
             
-            # Add `settings` to `context` for use on liquid template:
-            context[NS] = settings
+            contents
             
-            # Render `context` to liquid template:
-            partial.render!(context)
+          else
+            
+            # Parse template part:
+            partial = Liquid::Template.parse(file.read.strip)
+            
+            # ?
+            context.stack do
+              
+              # Add `settings` to `context` for use on liquid template:
+              context[NS] = settings
+              
+              # Render `context` to liquid template:
+              partial.render!(context)
+              
+            end
             
           end
           
