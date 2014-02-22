@@ -7,10 +7,10 @@ Gem::Specification.new do |spec|
   spec.name          = "jekyll-nada"
   spec.version       = Jekyll::Nada::VERSION
   spec.authors       = ["Micky Hulse"]
-  spec.email         = ["mickyhulse@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.email         = ["m@mky.io"]
+  spec.summary       = %q{A glorified Jekyll include tag.}
+  spec.description   = %q{Used to manage embedding of different types of media in post pages.}
+  spec.homepage      = "https://github.com/mhulse/jekyll-nada"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
