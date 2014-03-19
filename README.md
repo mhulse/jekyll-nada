@@ -193,7 +193,7 @@ Lastly, if you don't want Liquid to parse the included template, append `:raw` t
 
 ## Contributing
 
-Please read the [CONTRIBUTING.md](https://github.com/mhulse/jekyll-nada/blob/branch/CONTRIBUTING.md).
+Please read the [CONTRIBUTING.md](https://github.com/mhulse/jekyll-nada/blob/master/CONTRIBUTING.md).
 
 ### TL;DR:
 
