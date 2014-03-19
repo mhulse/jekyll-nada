@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="http://www.imdb.com/title/tt0096256/" target="_blank">
-    <img width="100%" src="nada.gif" alt="I have come here to chew bubblegum and kick ass ... and I'm all out of bubblegum.">
+	<img width="100%" src="nada.gif" alt="I have come here to chew bubblegum and kick ass ... and I'm all out of bubblegum.">
   </a>
 </p>
 
@@ -10,11 +10,11 @@
 
 **A glorified [Jekyll](http://jekyllrb.com/) include tag.**
 
-I wrote this plugin to help me manage embedding of different types of media (`<img>`, `<iframe>`, HTML5 `<audio>` and `<video>`, etc.) in post pages.
+I wrote this plugin to help me manage embedding of different types of media (`<img>`, `<iframe>`, HTML5 `<audio>` and `<video>`, Flash, etc.) in post pages.
 
-The functionality of the plugin is _very_ similar to the default Jekyll `{% include %}` tag, except that I've added the ability to combine tag, front matter and `site.config` variables (where the former will trump the latter if there are duplicate variables).
+The functionality of this plugin is _very_ similar to the default Jekyll `{% include %}` tag, except that I've added the ability to combine tag, front-matter and `site.config` variables (where the former will trump the latter if there are duplicate variables).
 
-Before this plugin, I had [written these](https://github.com/mhulse/jekyll-nada/issues/1) ... I **hated** that all of the HTML was mixed in with the logic.
+Before this plugin, I had [written these](https://github.com/mhulse/jekyll-nada/issues/1) ... Long story short, I **hated** that all of the HTML was mixed in with the logic.
 
 This plugin allows me to utilize liquid tags to do all the HTML bits and the plugin handles the variable normalization and other non-HTML logic bits.
 
@@ -39,6 +39,13 @@ Create a new file in you `_plugins/` folder named `nada.rb` with these contents:
 ```ruby
 # https://github.com/mhulse/jekyll-nada
 require 'jekyll-nada'
+```
+
+**OR**, even better, add the following to your site's `_config.yml`:
+
+```yml
+gems:
+  - jekyll-nada
 ```
 
 ## Usage
@@ -68,15 +75,15 @@ fig3:
   caption: "The **quick** brown _fox_ hxy jumps over the lazy dog."
 fig4:
   video:
-    - "foo1.webm"
-    - "foo2.ogv"
-    - "foo3.mp4"
+	- "foo1.webm"
+	- "foo2.ogv"
+	- "foo3.mp4"
   poster: "foo.png"
   caption: "The quick brown fox hxy jumps over the lazy dog."
 fig5:
   audio:
-    - foo1.ogg"
-    - "foo2.mp3"
+	- foo1.ogg"
+	- "foo2.mp3"
   caption: "The quick brown fox hxy jumps over the lazy dog."
 ---
 
@@ -91,9 +98,9 @@ fig5:
 {% nada fig5 class="x6" wrap="" %}
 ```
 
-As stated earlier, the tag variables override the front matter vars which override the `_config.yml` variables.
+As stated earlier, the tag variables override the front-matter variables, which override the `_config.yml` variables.
 
-By defaut, Nada will load a template called `nada.html` from your `_includes` folder. The logic in this template is up to you, and should be based on your needs/front matter.
+By defaut, Nada will load a template called `nada.html` from your `_includes` folder. The logic in this template is up to you, and should be based on your needs/front-matter.
 
 Here's an example template:
 
@@ -102,12 +109,18 @@ Here's an example template:
 	
 	{% if nada.wrap %}<div class="{{ nada.wrap }}">{% endif %}
 		{% if nada.image %}
+			{% if nada.lat and nada.lon %}
+				<a href="https://www.google.com/maps/place/{{ nada.lat | cgi_escape }}+{{ nada.lon | cgi_escape }}" target="_blank" rel="nofollow">
+			{% endif %}
 			<img
 				src="{{ site.uploads }}{{ nada.image }}"
 				{% if nada.width %}width="{{ nada.width }}"{% endif %}
 				{% if nada.height %}height="{{ nada.height }}"{% endif %}
 				{% if nada.alt %}alt="{{ nada.alt }}"{% endif %}
 			>
+			{% if nada.lat and nada.lon %}
+				</a>
+			{% endif %}
 		{% elsif nada.iframe %}
 			<iframe
 				src="{{ nada.iframe }}"
@@ -150,6 +163,16 @@ Here's an example template:
 					>
 				{% endfor %}
 			</audio>
+		{% elsif nada.flash %}
+			<object type="application/x-shockwave-flash" data="{{ site.uploads }}{{ nada.flash }}" width="{{ nada.width }}" height="{{ nada.height }}">
+				<param name="movie" value="{{ site.uploads }}{{ nada.flash }}">
+				<param name="allowscriptaccess" value="always">
+				<param name="menu" value="false">
+				<param name="quality" value="high">
+				<param name="flashvars" value="{{ nada.flashvars }}">
+				{% if nada.base %}<param name="base" value="{% if nada.base contains "http" %}{{ nada.base }}{% else %}{{ site.uploads }}{{ nada.base }}{% endif %}">{% endif %}
+				<p><a href="http://www.adobe.com/go/getflash"><img src="http://wwwimages.adobe.com/www.adobe.com/content/dam/Adobe/en/legal/logo/160x41_get_flashplayer.gif" alt="Get Adobe Flash player"/></a></p>
+			</object>
 		{% endif %}
 	{% if nada.wrap %}</div>{% endif %}
 	
@@ -158,9 +181,9 @@ Here's an example template:
 </figure>
 ```
 
-While that may look like a ton of markup, the advantage here is that the same logic isn't crammed into the logic of a plugin file. The control is in the hands of the end user.
+While that may look like a lot of markup, the advantage here is that the same markup isn't crammed into the logic of a plugin file. Using a template puts full control into the hands of the end user.
 
-Again, the default Jekyll `include` tag could do something very similar; the advantage to my plugin is the variable "normalization", which should make the Liquid logic easier to manage.
+Again, the default Jekyll `include` tag could do something very similar; the advantage to my plugin is the multi-level variable "normalization", which should make the Liquid logic easier to manage.
 
 Lastly, if you don't want Liquid to parse the included template, append `:raw` to `nada` tag call, like so:
 
@@ -168,14 +191,40 @@ Lastly, if you don't want Liquid to parse the included template, append `:raw` t
 {% nada:raw template="test.html" foo="baz" %}
 ```
 
+## Contributing
+
+Please read the [CONTRIBUTING.md](https://github.com/mhulse/jekyll-nada/blob/branch/CONTRIBUTING.md).
+
+### TL;DR:
+
+1. Fork it: `http://github.com/<my-github-username>/nada/fork`
+1. Create your feature branch: `git checkout -b my-new-feature`
+1. Commit your changes: `git commit -am 'Add some feature.'`
+1. Push to the branch: `git push origin my-new-feature`
+1. Create new [pull request](https://github.com/mhulse/jekyll-nada/pulls).
+
 ## Feedback
 
 [Bugs? Constructive feedback? Questions?](https://github.com/mhulse/jekyll-nada/issues/new?title=Your%20code%20sucks!&body=Here%27s%20why%3A%20)
 
-## Contributing
+## Changelog
 
-1. Fork it ( http://github.com/<my-github-username>/nada/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+* [v0.0.1 milestones](https://github.com/mhulse/jekyll-nada/issues?direction=desc&milestone=1&page=1&sort=updated&state=closed)
+
+## [Release history](https://github.com/mhulse/jekyll-nada/releases)
+
+* 2014-02-22   [v0.0.1](https://github.com/mhulse/jekyll-nada/releases/tag/v0.0.1)   Hello world!
+
+---
+
+#### LEGAL
+
+Copyright © 2014 [Micky Hulse](http://mky.io)
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this work except in compliance with the License. You may obtain a copy of the License in the LICENSE file, or at:
+
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+<img width="20" height="20" align="absmiddle" src="https://github.global.ssl.fastly.net/images/icons/emoji/octocat.png" alt=":octocat:" title=":octocat:" class="emoji">
