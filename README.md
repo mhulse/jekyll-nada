@@ -28,7 +28,7 @@ Add this line to your application's Gemfile:
 gem 'jekyll-nada', :git => 'git://github.com/mhulse/jekyll-nada.git'
 ```
 
-And then execute:
+... and then execute:
 
 ```bash
 $ bundle install
